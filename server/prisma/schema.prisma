@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(50)
+  address     String?       @db.Text
+  phone       String?       @db.VarChar(50)
+  email       String?       @db.VarChar(50)
+  description String?       @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  products    Product[]
+  transactions Transaction[]
+}
+
+model Product {
+  id            Int           @id @default(autoincrement())
+  name          String        @db.VarChar(100)
+  quantity      Float
+  category      String?       @db.VarChar(50)
+  weight        Float?
+  unit          String?       @db.VarChar(20)
+  totalPrice    Float         @map("total_price")
+  customerPrice Float         @map("customer_price")
+  description   String?       @db.Text
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  provider      Provider      @relation(fields: [providerId], references: [id])
+  providerId    Int           @map("providers_id")
+  productItems  ProductItem[]
+  transactions  Transaction[]
+}
+
+model Item {
+  id            Int           @id @default(autoincrement())
+  name          String        @db.VarChar(50)
+  unit          String?       @db.VarChar(20)
+  category      String?       @db.VarChar(50)
+  price         Float
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  productItems  ProductItem[]
+  orderItems    OrderItem[]
+}
+
+model ProductItem {
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int      @map("products_id")
+  item       Item     @relation(fields: [itemId], references: [id])
+  itemId     Int      @map("items_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@id([productId, itemId])
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  provider    Provider @relation(fields: [providerId], references: [id])
+  providerId  Int      @map("providers_id")
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   Int      @map("products_id")
+  status      String   @db.VarChar(50)
+  name        String   @db.VarChar(50)
+  quantity    Float
+  unit        String?  @db.VarChar(20)
+  price       Float
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
+
+model Order {
+  id           Int           @id @default(autoincrement())
+  status       String        @db.VarChar(20)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  orderItems   OrderItem[]
+  orderTables  OrderTable[]
+  bill         Bill?
+}
+
+model OrderItem {
+  order       Order    @relation(fields: [orderId], references: [id])
+  orderId     Int      @map("orders_id")
+  item        Item     @relation(fields: [itemId], references: [id])
+  itemId      Int      @map("items_id")
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@id([orderId, itemId])
+}
+
+model Table {
+  id           Int               @id @default(autoincrement())
+  quantity     Int
+  location     String?           @db.Text
+  status       String            @db.VarChar(20)
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  orderTables  OrderTable[]
+  reservations TableReservation[]
+}
+
+model OrderTable {
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int      @map("orders_id")
+  table     Table    @relation(fields: [tableId], references: [id])
+  tableId   Int      @map("tables_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@id([orderId, tableId])
+}
+
+model Reservation {
+  id           Int               @id @default(autoincrement())
+  quantity     Int
+  name         String            @db.VarChar(50)
+  phone        String?           @db.VarChar(50)
+  email        String?           @db.VarChar(50)
+  time         DateTime
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  tables       TableReservation[]
+}
+
+model TableReservation {
+  table         Table       @relation(fields: [tableId], references: [id])
+  tableId       Int         @map("tables_id")
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+  reservationId Int         @map("reservations_id")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  @@id([tableId, reservationId])
+}
+
+model Bill {
+  id        Int      @id @default(autoincrement())
+  total     Float
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int      @unique @map("orders_id")
+  staffId   Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
