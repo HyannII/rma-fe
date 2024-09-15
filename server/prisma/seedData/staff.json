@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "age": 25,
+      "name": "Alice Smith",
+      "phoneNumber": "987-654-3210",
+      "cid": "AB123456",
+      "wagesPerShift": 15.0,
+      "role": "Waitress"
+    },
+    {
+      "id": 2,
+      "age": 30,
+      "name": "Bob Johnson",
+      "phoneNumber": "876-543-2109",
+      "cid": "CD654321",
+      "wagesPerShift": 20.0,
+      "role": "Chef"
+    }
+  ]

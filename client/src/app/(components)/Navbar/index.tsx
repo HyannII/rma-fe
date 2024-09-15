@@ -33,19 +33,18 @@ const Navbar = () => {
       {/* RIGHT SIDE */}
       <div className="flex justify-between items-center gap-5">
         <div className="hidden md:flex justify-between items-center gap-5">
-          <div>
-            <button onClick={toggleDarkMode}>
+          <div className="flex">
+            <button onClick={toggleDarkMode} className="px-3">
               {!isDarkMode ? (
                 <Sun className="cursor-pointer text-gray-500" size={24}></Sun>
               ) : (
                 <Moon className="cursor-pointer text-gray-500" size={24}></Moon>
               )}
             </button>
+            <Link href="/" className="px-3">
+              <Settings className="cursor-pointer text-gray-500" size={24} />
+            </Link>
           </div>
-          <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
-          <Link href="/">
-            <Settings className="cursor-pointer text-gray-500" size={24} />
-          </Link>
         </div>
       </div>
     </div>

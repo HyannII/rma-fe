@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "quantity": 100,
+      "name": "Flour",
+      "type": "Ingredient",
+      "averageImportPrice": 1.2,
+      "weight": 50,
+      "unit": "kg",
+      "sellingPrice": 1.5
+    },
+    {
+      "id": 2,
+      "quantity": 200,
+      "name": "Sugar",
+      "type": "Ingredient",
+      "averageImportPrice": 0.8,
+      "weight": 25,
+      "unit": "kg",
+      "sellingPrice": 1.0
+    }
+  ]

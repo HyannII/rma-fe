@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "staffId": 1,
+      "shiftId": 1,
+      "dayOfWeek": "2024-09-09T08:00:00Z",
+      "isChecked": true
+    },
+    {
+      "id": 2,
+      "staffId": 2,
+      "shiftId": 2,
+      "dayOfWeek": "2024-09-09T10:00:00Z",
+      "isChecked": false
+    }
+  ]

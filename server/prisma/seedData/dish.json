@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "name": "Pancake",
+      "unit": 2.0,
+      "price": 5.0,
+      "type": "Dessert"
+    },
+    {
+      "id": 2,
+      "name": "Fried Chicken",
+      "unit": 1.5,
+      "price": 8.0,
+      "type": "Main Course"
+    }
+  ]

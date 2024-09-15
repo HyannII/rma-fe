@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "providerId": 1,
+      "goodsId": 1,
+      "quantity": 50,
+      "importPrice": 10
+    },
+    {
+      "id": 2,
+      "providerId": 2,
+      "goodsId": 2,
+      "quantity": 100,
+      "importPrice": 20
+    }
+]

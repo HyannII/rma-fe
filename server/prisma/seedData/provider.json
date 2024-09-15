@@ -1,0 +1,14 @@
+[
+    {
+      "id": 1,
+      "name": "Provider One",
+      "address": "123 Main Street",
+      "contactInfo": "contact@providerone.com"
+    },
+    {
+      "id": 2,
+      "name": "Provider Two",
+      "address": "456 Second Street",
+      "contactInfo": "contact@providertwo.com"
+    }
+]

@@ -26,15 +26,20 @@ async function main() {
   const dataDirectory = path.join(__dirname, "seedData");
 
   const orderedFileNames = [
-    "products.json",
-    "expenseSummary.json",
-    "sales.json",
-    "salesSummary.json",
-    "purchases.json",
-    "purchaseSummary.json",
-    "users.json",
-    "expenses.json",
-    "expenseByCategory.json",
+    "provider.json",
+    "goods.json",
+    "inventoryReceipt.json",
+    "dish.json",
+    "ingredient.json",
+    "order.json",
+    "orderDetail.json",
+    "table.json",
+    "tableOrder.json",
+    "reservation.json",
+    "staff.json",
+    "receipt.json",
+    "shift.json",
+    "staffShift.json",
   ];
 
   await deleteAllData(orderedFileNames);

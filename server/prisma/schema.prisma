@@ -8,148 +8,138 @@ datasource db {
 }
 
 model Provider {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(50)
-  address     String?       @db.Text
-  phone       String?       @db.VarChar(50)
-  email       String?       @db.VarChar(50)
-  description String?       @db.Text
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  products    Product[]
-  transactions Transaction[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  address           String
+  contactInfo       String
+  inventoryReceipts InventoryReceipt[]
 }
 
-model Product {
-  id            Int           @id @default(autoincrement())
-  name          String        @db.VarChar(100)
-  quantity      Float
-  category      String?       @db.VarChar(50)
-  weight        Float?
-  unit          String?       @db.VarChar(20)
-  totalPrice    Float         @map("total_price")
-  customerPrice Float         @map("customer_price")
-  description   String?       @db.Text
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  provider      Provider      @relation(fields: [providerId], references: [id])
-  providerId    Int           @map("providers_id")
-  productItems  ProductItem[]
-  transactions  Transaction[]
-}
-
-model Item {
-  id            Int           @id @default(autoincrement())
-  name          String        @db.VarChar(50)
-  unit          String?       @db.VarChar(20)
-  category      String?       @db.VarChar(50)
-  price         Float
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  productItems  ProductItem[]
-  orderItems    OrderItem[]
-}
-
-model ProductItem {
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  Int      @map("products_id")
-  item       Item     @relation(fields: [itemId], references: [id])
-  itemId     Int      @map("items_id")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-
-  @@id([productId, itemId])
-}
-
-model Transaction {
+model InventoryReceipt {
   id          Int      @id @default(autoincrement())
+  providerId  Int
+  goodsId     Int
+  quantity    Int
+  importPrice Float
   provider    Provider @relation(fields: [providerId], references: [id])
-  providerId  Int      @map("providers_id")
-  product     Product  @relation(fields: [productId], references: [id])
-  productId   Int      @map("products_id")
-  status      String   @db.VarChar(50)
-  name        String   @db.VarChar(50)
-  quantity    Float
-  unit        String?  @db.VarChar(20)
-  price       Float
-  description String?  @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  goods       Goods    @relation(fields: [goodsId], references: [id])
+}
+
+model Goods {
+  id                 Int                @id @default(autoincrement())
+  quantity           Int
+  name               String
+  type               String
+  averageImportPrice Float
+  weight             Float
+  unit               String
+  sellingPrice       Float
+  inventoryReceipts  InventoryReceipt[]
+  ingredients        Ingredient[]
+}
+
+model Dish {
+  id           Int           @id @default(autoincrement())
+  name         String
+  unit         Float
+  price        Float
+  type         String
+  orderDetails OrderDetail[]
+  ingredients  Ingredient[]
+}
+
+model Ingredient {
+  id      Int   @id @default(autoincrement())
+  dishId  Int
+  goodsId Int
+  dish    Dish  @relation(fields: [dishId], references: [id])
+  goods   Goods @relation(fields: [goodsId], references: [id])
 }
 
 model Order {
   id           Int           @id @default(autoincrement())
-  status       String        @db.VarChar(20)
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  orderItems   OrderItem[]
-  orderTables  OrderTable[]
-  bill         Bill?
+  status       String
+  orderDetails OrderDetail[]
+  tableOrders  TableOrder[]
+  receipts     Receipt[]
 }
 
-model OrderItem {
-  order       Order    @relation(fields: [orderId], references: [id])
-  orderId     Int      @map("orders_id")
-  item        Item     @relation(fields: [itemId], references: [id])
-  itemId      Int      @map("items_id")
-  description String?  @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  @@id([orderId, itemId])
+model OrderDetail {
+  id      Int     @id @default(autoincrement())
+  dishId  Int
+  orderId Int
+  note    String?
+  dish    Dish    @relation(fields: [dishId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id])
 }
 
 model Table {
-  id           Int               @id @default(autoincrement())
-  quantity     Int
-  location     String?           @db.Text
-  status       String            @db.VarChar(20)
-  createdAt    DateTime          @default(now()) @map("created_at")
-  updatedAt    DateTime          @updatedAt @map("updated_at")
-  orderTables  OrderTable[]
-  reservations TableReservation[]
+  id            Int           @id @default(autoincrement())
+  tableNo       Int
+  numberOfSeats Int
+  place         String
+  status        String
+  tableOrders   TableOrder[]
+  reservations  Reservation[]
 }
 
-model OrderTable {
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   Int      @map("orders_id")
-  table     Table    @relation(fields: [tableId], references: [id])
-  tableId   Int      @map("tables_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@id([orderId, tableId])
+model TableOrder {
+  id      Int   @id @default(autoincrement())
+  tableId Int
+  orderId Int
+  table   Table @relation(fields: [tableId], references: [id])
+  order   Order @relation(fields: [orderId], references: [id])
 }
 
 model Reservation {
-  id           Int               @id @default(autoincrement())
-  quantity     Int
-  name         String            @db.VarChar(50)
-  phone        String?           @db.VarChar(50)
-  email        String?           @db.VarChar(50)
-  time         DateTime
-  createdAt    DateTime          @default(now()) @map("created_at")
-  updatedAt    DateTime          @updatedAt @map("updated_at")
-  tables       TableReservation[]
+  id              Int       @id @default(autoincrement())
+  tableId         Int
+  reservationTime DateTime
+  name            String
+  phoneNumber     String
+  table           Table     @relation(fields: [tableId], references: [id])
+  Receipt         Receipt[]
 }
 
-model TableReservation {
-  table         Table       @relation(fields: [tableId], references: [id])
-  tableId       Int         @map("tables_id")
+model Receipt {
+  id            Int         @id @default(autoincrement())
+  totalPrice    Float
+  payBy         String
+  timePaid      DateTime
+  reservationId Int
+  staffId       Int
   reservation   Reservation @relation(fields: [reservationId], references: [id])
-  reservationId Int         @map("reservations_id")
-  createdAt     DateTime    @default(now()) @map("created_at")
-  updatedAt     DateTime    @updatedAt @map("updated_at")
-
-  @@id([tableId, reservationId])
+  staff         Staff       @relation(fields: [staffId], references: [id])
+  order         Order?      @relation(fields: [orderId], references: [id])
+  orderId       Int?
 }
 
-model Bill {
+model Staff {
+  id            Int          @id @default(autoincrement())
+  age           Int
+  name          String
+  phoneNumber   String
+  cid           String
+  wagesPerShift Float
+  role          String
+  staffShifts   StaffShift[]
+  receipts      Receipt[]
+}
+
+model StaffShift {
   id        Int      @id @default(autoincrement())
-  total     Float
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   Int      @unique @map("orders_id")
-  staffId   Int?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  staffId   Int
+  shiftId   Int
+  dayOfWeek DateTime
+  isChecked Boolean
+  staffs    Staff    @relation(fields: [staffId], references: [id])
+  shift     Shift    @relation(fields: [shiftId], references: [id])
+}
+
+model Shift {
+  id          Int          @id @default(autoincrement())
+  shiftName   String
+  startAt     DateTime
+  endAt       DateTime
+  staffShifts StaffShift[]
 }

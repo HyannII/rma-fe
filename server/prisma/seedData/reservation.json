@@ -1,0 +1,9 @@
+[
+    {
+      "id": 1,
+      "tableId": 2,
+      "reservationTime": "2024-09-09T18:00:00Z",
+      "name": "John Doe",
+      "phoneNumber": "123-456-7890"
+    }
+  ]

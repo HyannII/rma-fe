@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "tableNo": 1,
+      "numberOfSeats": 4,
+      "place": "Near Window",
+      "status": "Available"
+    },
+    {
+      "id": 2,
+      "tableNo": 2,
+      "numberOfSeats": 2,
+      "place": "Middle of the hall",
+      "status": "Reserved"
+    }
+  ]

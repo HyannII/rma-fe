@@ -2,7 +2,23 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
-import { Archive, CircleDollarSign, Contact, Icon, Layout, LucideIcon, Menu, Package, PackagePlus, Receipt, Settings, Users, Warehouse } from "lucide-react";
+import {
+  Archive,
+  CircleDollarSign,
+  Contact,
+  CookingPot,
+  Icon,
+  Layout,
+  LucideIcon,
+  Menu,
+  Package,
+  PackagePlus,
+  Receipt,
+  Settings,
+  Users,
+  Utensils,
+  Warehouse,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -38,7 +54,9 @@ const SidebarLink = ({
           className={`${
             isCollapsed ? "hidden" : "block"
           } font-medium text-gray-700`}
-        >{label}</span>
+        >
+          {label}
+        </span>
       </div>
     </Link>
   );
@@ -87,15 +105,9 @@ const Sidebar = () => {
           isCollapsed={isSidebarCollapsed}
         ></SidebarLink>
         <SidebarLink
-          href="/products"
+          href="/goods"
           icon={Package}
           label="Hàng hoá"
-          isCollapsed={isSidebarCollapsed}
-        ></SidebarLink>
-        <SidebarLink
-          href="/products"
-          icon={PackagePlus}
-          label="Nhập hàng"
           isCollapsed={isSidebarCollapsed}
         ></SidebarLink>
         <SidebarLink
@@ -105,13 +117,19 @@ const Sidebar = () => {
           isCollapsed={isSidebarCollapsed}
         ></SidebarLink>
         <SidebarLink
+          href="/dishes"
+          icon={CookingPot}
+          label="Món ăn"
+          isCollapsed={isSidebarCollapsed}
+        ></SidebarLink>
+        <SidebarLink
           href="/receipts"
           icon={Receipt}
           label="Hoá đơn"
           isCollapsed={isSidebarCollapsed}
         ></SidebarLink>
         <SidebarLink
-          href="/vendors"
+          href="/providers"
           icon={Users}
           label="Nhà cung cấp"
           isCollapsed={isSidebarCollapsed}
@@ -131,7 +149,12 @@ const Sidebar = () => {
       </div>
       {/* footer */}
       <div>
-        <p className="text-center text-xs text-gray-500">&copy; RMA_FE 2024</p>
+        <SidebarLink
+          href="/settings"
+          icon={Settings}
+          label="Cài đặt"
+          isCollapsed={isSidebarCollapsed}
+        />
       </div>
     </div>
   );
